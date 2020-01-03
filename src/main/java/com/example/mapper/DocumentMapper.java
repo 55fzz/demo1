@@ -22,4 +22,5 @@ public interface DocumentMapper extends BaseMapper<Document> {
 
     @Select({"<script> SELECT * FROM document GROUP BY createDate ORDER BY createDate DESC LIMIT 0, 10; </script>"})
     public List<Document> getListByCreateDate();
+
 }

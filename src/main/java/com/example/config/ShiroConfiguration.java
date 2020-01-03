@@ -8,6 +8,7 @@ import javax.servlet.Filter;
 
 import com.example.realm.UserRealm;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.session.mgt.SessionValidationScheduler;
 import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -44,18 +45,17 @@ public class ShiroConfiguration {
         //配置静态资源允许访问
 		filterChainDefinitionMap.put("/js/**","anon");
 		filterChainDefinitionMap.put("/css/**","anon");
-        filterChainDefinitionMap.put("/img/**","anon");
-        filterChainDefinitionMap.put("/user/addUser","anon");
 		filterChainDefinitionMap.put("/login","anon");
 		filterChainDefinitionMap.put("/user/loginCheck","anon");
+        filterChainDefinitionMap.put("/zhuce","anon");
+        filterChainDefinitionMap.put("/user/addUser","anon");
 //        filterChainDefinitionMap.put("**","anon");
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
 		filterChainDefinitionMap.put("/**", "authc");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("login");
-
+        shiroFilterFactoryBean.setUnauthorizedUrl("/login");
         Map<String, Filter> filters=new HashMap<String,Filter>();
         shiroFilterFactoryBean.setFilters(filters);
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
@@ -114,10 +114,12 @@ public class ShiroConfiguration {
         simpleCookie.setPath("/");
         return simpleCookie;
     }
+
     @Bean
     public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor(){
         return new LifecycleBeanPostProcessor();
     }
+
     @Bean(name = "securityManager")
     public DefaultWebSecurityManager getDefaultWebSecurityManager(UserRealm userRealm) {
         DefaultWebSecurityManager dwsm = new DefaultWebSecurityManager();
@@ -144,4 +146,6 @@ public class ShiroConfiguration {
         aasa.setSecurityManager(getDefaultWebSecurityManager(userRealm));
         return aasa;
     }
+
+
 }
